@@ -1,4 +1,6 @@
 inst/extdata/fcs/*
+inst/explore/tsnePlot-allClusters.RData
+inst/explore/tsnePlot-allClusters.RData
 # History files
 .Rhistory
 .Rapp.history

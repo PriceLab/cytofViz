@@ -1,2 +1,2 @@
-# cytofViz
-mass spec cytometry, single cell, erythropoeisis
+# trenaViz
+webapp for creating and exploring trena models
