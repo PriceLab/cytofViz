@@ -30,7 +30,7 @@ assignColor <- function(values, min, max, colors)
 .createSidebar <- function()
 {
   dashboardSidebar(
-     radioButtons("transformData", "Transform", choices=c("raw", "asinh"), selected="raw", inline=TRUE),
+     radioButtons("transformData", "Transform", choices=c("raw", "asinh"), selected="asinh", inline=TRUE),
      radioButtons("scaleData", "Scale", choices=c("This TF", "All TFs"), selected="This TF", inline=TRUE),
      selectInput("choosePalette", "Select Palette", c("spectral.1-10", "spectral.1-20", rownames(tbl.palettes))),
      selectInput("chooseProteinFromList", "Choose Protein From List:", conditions,
