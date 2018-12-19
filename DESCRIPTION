@@ -1,8 +1,8 @@
 Package: CytofViz
 Type: Package
 Title: CytofViz
-Version: 0.99.03
-Date: 2018-12-17
+Version: 0.99.04
+Date: 2018-12-19
 Author: Paul Shannon
 Maintainer: Paul Shannon <pshannon@systemsbiology.org>
 Depends: R (>= 3.5.0), shiny, shinyjs, shinydashboard, igvShiny, DT, later
