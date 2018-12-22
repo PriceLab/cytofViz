@@ -1,9 +1,10 @@
 library(RColorBrewer)
 library(shiny)
 library(shinydashboard)
+library(ggplot2)
 #------------------------------------------------------------------------------------------------------------------------
 if(!exists("tbl"))
-   load("tbl.allDays.allProteins.RData")
+   load("tbl.allDays.allProteins.transformed.RData")
    tbl <- tbl.all
 
 conditions <- c("Phenograph", sort(colnames(tbl)[9:35]))
@@ -32,10 +33,10 @@ assignColor <- function(values, min, max, colors)
 .createSidebar <- function()
 {
   dashboardSidebar(
-     radioButtons("transformData", "Transform", choices=c("raw", "asinh"), selected="asinh", inline=TRUE),
-     radioButtons("scaleData", "Scale", choices=c("This TF", "All TFs"), selected="This TF", inline=TRUE),
-     selectInput("choosePalette", "Select Palette",
-                 c("spectral.1-10", "spectral.1-20", "spectral.1-5", "spectral.2-10", rownames(tbl.palettes))),
+     #radioButtons("transformData", "Transform", choices=c("raw", "asinh"), selected="asinh", inline=TRUE),
+     #radioButtons("scaleData", "Scale", choices=c("This TF", "All TFs"), selected="This TF", inline=TRUE),
+     #selectInput("choosePalette", "Select Palette",
+     #            c("spectral.1-10", "spectral.1-20", "spectral.1-5", "spectral.2-10", rownames(tbl.palettes))),
      selectInput("chooseProteinFromList", "Choose Protein From List:", conditions,
                  selectize=FALSE, size=length(conditions))
      ) # dashboardSidebar
@@ -60,47 +61,22 @@ server <- function(input, output) {
      transform <- input$transformData
      scale <- input$scaleData
        # TODO: refactor this into a tested function
-     if(condition == "Phenograph")
-        colors = tbl$color
-     else{
-        palette.name <- input$choosePalette
-        if(grepl("spectral.", palette.name, fixed=TRUE)){
-          if(palette.name == "spectral.1-20"){
-             colors <- spectral.1.20.colors
-             color.count <- length(spectral.1.20.colors)
-             }
-          if(palette.name == "spectral.1-10"){
-             colors <- spectral.1.10.colors
-             color.count <- length(spectral.1.10.colors)
-             }
-          if(palette.name == "spectral.1-5"){
-             colors <- spectral.1.5.colors
-             color.count <- length(spectral.1.5.colors)
-             }
-          if(palette.name == "spectral.2-10"){
-             colors <- spectral.2.10.colors
-             color.count <- length(spectral.2.10.colors)
-             }
-
-        } else {
-           color.count <- tbl.palettes[palette.name, "maxcolors"]
-           colors <- brewer.pal(color.count, palette.name)
-           }
-        working.mtx <- mtx
-        if(transform == "asinh")
-           working.mtx <- asinh(mtx)
-        vec <- working.mtx[, condition]
-        if(scale == "This TF"){
-           minValue <- min(vec)
-           maxValue <- max(vec)
-        } else {
-           minValue <- min(working.mtx)
-           maxValue <- max(working.mtx)
-           }
-        colors <- assignColor(vec, minValue, maxValue, colors)
-        }  # else: not Phenograph
-     #browser()
-     plot(tbl$tsne1 , tbl$tsne2, col=colors, main=condition, pch=19)
+     if(condition == "Phenograph"){
+        colors <- tbl$color
+        par (mai=c(1,1,1,1))
+        plot(tbl$tsne1 , tbl$tsne2, col=colors, xlab="tsne1", ylab="tsne2", main=condition, pch=19,
+             cex.lab=2, cex.axis=1, cex.main=2, cex.sub=2)
+     } else {
+        myPalette <- colorRampPalette(c("#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4",
+                                        "#E6F598", "#FFFFBF", "#FEE08B", "#FDAE61",
+                                        "#F46D43", "#D53E4F", "#9E0142"))
+        condition.wrapped <- sprintf("`%s`", condition)
+        ggplot(tbl, aes_string(x="tsne1", y="tsne2", color=condition.wrapped)) +
+               geom_point(size=2) + #, shape=23) +
+           scale_colour_gradientn(limits = NULL, name = "", colours = myPalette(nrow(tbl) * 2)) +
+           ggtitle(condition) +
+           theme(plot.title = element_text(size=20, face="bold", hjust = 0.5))
+        } # ! Phenograph
      })
 
 } # server
