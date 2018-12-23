@@ -1,12 +1,14 @@
-ID = 21dec2018
+ID = 23dec2018
+TESTPORT=60055
+
 build:
 	docker build -t cytof_$(ID) -f Dockerfile .
 
 bash:
-	docker run -ti --rm -p 60051:3838 cytof_$(ID) bash
+	docker run -ti --rm -p $(TESTPORT):3838 cytof_$(ID) bash
 
 dockerRun:
-	docker run -p 60051:3838 cytof_$(ID)
+	docker run -p $(TESTPORT):3838 cytof_$(ID)
 
 save:
 	time docker save cytof_$(ID) >  ~/tmp/docker_cytof_$(ID).image
