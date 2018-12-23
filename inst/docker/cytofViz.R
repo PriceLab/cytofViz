@@ -33,6 +33,8 @@ assignColor <- function(values, min, max, colors)
 .createSidebar <- function()
 {
   dashboardSidebar(
+     tags$head(tags$style("#plot1{height:82vh !important;}")),
+
      #radioButtons("transformData", "Transform", choices=c("raw", "asinh"), selected="asinh", inline=TRUE),
      #radioButtons("scaleData", "Scale", choices=c("This TF", "All TFs"), selected="This TF", inline=TRUE),
      #selectInput("choosePalette", "Select Palette",
@@ -44,7 +46,7 @@ assignColor <- function(values, min, max, colors)
 } # .createSidebar
 #------------------------------------------------------------------------------------------------------------------------
 ui <- dashboardPage(
-  dashboardHeader(title = "cytof erythropoiesis"),
+   dashboardHeader(title = "cytof erythropoiesis"),
   .createSidebar(),
   dashboardBody(
     fluidRow(
