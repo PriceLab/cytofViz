@@ -53,7 +53,7 @@ server <- function(input, output) {
 
   output$imageRenderingPanel <- renderImage({
      imagePath <- normalizePath(file.path("./images", "phenograph.png"))
-     printf("imagePath: %s (%s)", imagePath, file.exists(imagePath))
+     # printf("imagePath: %s (%s)", imagePath, file.exists(imagePath))
      list(src = imagePath, contentType = 'image/png', width = 800, height = 800, alt = "file not found")
      }, deleteFile = FALSE)
 
